@@ -1,0 +1,14 @@
+<view class="container">
+  <view class="card">
+    <view class="card-title">全部预约（{{list.length}}）</view>
+    <view wx:for="{{list}}" wx:key="id" class="list-item">
+      <view class="row">
+        <view class="left">
+          <view class="name">{{item.name}}　<text class="badge {{item.status}}">{{item.statusText}}</text></view>
+          <view class="info">{{item.doctor}} · {{item.date}} {{item.time}}</view>
+          <view class="info" wx:if="{{item.resultText}}">确认结果：{{item.resultText}}　操作人：{{item.operator || '前台'}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

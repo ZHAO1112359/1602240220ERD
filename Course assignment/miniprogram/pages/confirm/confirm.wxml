@@ -1,0 +1,22 @@
+<view class="container" wx:if="{{a}}">
+  <view class="card">
+    <view class="card-title">电话确认 · {{a.name}}</view>
+    <view class="muted">{{a.doctor}} · {{a.date}} {{a.time}}　{{a.phone}}</view>
+    <view class="muted" style="margin-top:12rpx">请选择患者答复（决定状态与是否计入爽约）：</view>
+  </view>
+
+  <view class="card">
+    <view class="list-item" data-r="COMING" bindtap="doConfirm">
+      <view class="name">要来 → 延迟到诊</view><view class="info">挽回，不计入爽约</view>
+    </view>
+    <view class="list-item" data-r="RESCHEDULE" bindtap="doConfirm">
+      <view class="name">改期 → 已改期</view><view class="info">挽回，不计入爽约</view>
+    </view>
+    <view class="list-item" data-r="NOT_COMING" bindtap="doConfirm">
+      <view class="name">不来 → 爽约</view><view class="info">计入爽约</view>
+    </view>
+    <view class="list-item" data-r="UNREACHABLE" bindtap="doConfirm">
+      <view class="name">联系不上 → 爽约</view><view class="info">计入爽约</view>
+    </view>
+  </view>
+</view>

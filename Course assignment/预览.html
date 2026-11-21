@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>牙科诊所预约与到诊确认小程序 · 交互原型</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #eef1f4; color: #1f2d3d; min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; padding: 24px 16px 40px;
+  }
+  h1 { font-size: 19px; font-weight: 600; margin-bottom: 4px; }
+  .subtitle { font-size: 12px; color: #7a8896; margin-bottom: 14px; }
+  .role-switch { display: flex; gap: 8px; margin-bottom: 14px; }
+  .role-switch button {
+    border: 1px solid #cfd8e0; background: #fff; color: #5a6b7b;
+    padding: 8px 20px; border-radius: 20px; font-size: 13px; cursor: pointer;
+  }
+  .role-switch button.active { background: #2b7a78; border-color: #2b7a78; color: #fff; }
+  .phone {
+    width: 390px; background: #fff; border-radius: 34px;
+    box-shadow: 0 18px 50px rgba(20,40,60,.18); overflow: hidden;
+    border: 8px solid #1c2733; position: relative;
+  }
+  .statusbar {
+    height: 30px; background: #fff; display: flex; align-items: center;
+    justify-content: space-between; padding: 0 18px; font-size: 11px; color: #8a97a4;
+  }
+  .topbar {
+    background: #2b7a78; color: #fff; padding: 12px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .topbar .title { font-size: 16px; font-weight: 600; }
+  .topbar .role-tag { font-size: 11px; opacity: .85; border: 1px solid rgba(255,255,255,.5); padding: 2px 8px; border-radius: 10px; }
+  .screen { height: 620px; overflow-y: auto; background: #f6f8fa; padding: 14px; }
+  .card { background: #fff; border-radius: 14px; padding: 14px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.04); }
+  .card h3 { font-size: 14px; margin-bottom: 10px; color: #2b3a49; }
+  .muted { color: #8896a3; font-size: 12px; }
+  .btn {
+    display: inline-block; background: #2b7a78; color: #fff; border: none;
+    padding: 10px 16px; border-radius: 10px; font-size: 13px; cursor: pointer;
+  }
+  .btn:disabled { background: #c8d2da; cursor: not-allowed; }
+  .btn.ghost { background: #eef4f4; color: #2b7a78; }
+  .btn.sm { padding: 6px 12px; font-size: 12px; }
+  .btn.danger { background: #c0504d; }
+  .hero { background: linear-gradient(135deg,#2b7a78,#3a9d9a); color: #fff; border-radius: 16px; padding: 18px; margin-bottom: 12px; }
+  .hero .big { font-size: 17px; font-weight: 600; margin-bottom: 6px; }
+  .hero .small { font-size: 12px; opacity: .9; line-height: 1.6; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .tile { background: #fff; border-radius: 12px; padding: 14px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,.04); cursor: pointer; }
+  .tile .ico { font-size: 22px; }
+  .tile .lb { font-size: 12px; margin-top: 6px; color: #3a4a59; }
+  .field { margin-bottom: 12px; }
+  .field label { display: block; font-size: 12px; color: #6b7b8a; margin-bottom: 6px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { border: 1px solid #d5dee6; background: #fff; padding: 7px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; color: #41515f; }
+  .chip.sel { background: #2b7a78; border-color: #2b7a78; color: #fff; }
+  .chip.disabled { background: #eef1f4; color: #b6c0c9; cursor: not-allowed; text-decoration: line-through; }
+  input.txt { width: 100%; border: 1px solid #d5dee6; border-radius: 8px; padding: 9px 10px; font-size: 13px; }
+  .stepbar { display: flex; gap: 6px; margin-bottom: 12px; }
+  .stepbar span { flex: 1; height: 4px; background: #dfe6ec; border-radius: 2px; }
+  .stepbar span.on { background: #2b7a78; }
+  .list-item { border-bottom: 1px solid #eef1f4; padding: 11px 0; }
+  .list-item:last-child { border-bottom: none; }
+  .row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .row .left { flex: 1; }
+  .name { font-size: 13px; font-weight: 600; }
+  .info { font-size: 11px; color: #8896a3; margin-top: 3px; }
+  .badge { font-size: 11px; padding: 3px 9px; border-radius: 10px; white-space: nowrap; }
+  .st-已预约 { background: #e7f1fb; color: #2b6cb0; }
+  .st-待确认 { background: #fdf0dc; color: #a86b12; }
+  .st-延迟到诊 { background: #e6f4ea; color: #2f7d43; }
+  .st-已改期 { background: #ede9f7; color: #6b46a8; }
+  .st-爽约 { background: #fbe9e9; color: #b34545; }
+  .st-已就诊 { background: #eceff1; color: #5f6b75; }
+  .st-已取消 { background: #eceff1; color: #5f6b75; }
+  .tabbar {
+    display: flex; background: #fff; border-top: 1px solid #e8edf1; height: 56px;
+  }
+  .tabbar div { flex: 1; text-align: center; padding-top: 9px; font-size: 11px; color: #93a0ac; cursor: pointer; }
+  .tabbar div.active { color: #2b7a78; font-weight: 600; }
+  .tabbar .ti { font-size: 18px; }
+  .empty { text-align: center; color: #9aa7b2; font-size: 12px; padding: 30px 10px; }
+  .stat-num { font-size: 26px; font-weight: 700; color: #2b7a78; }
+  .stat-lb { font-size: 11px; color: #8896a3; margin-top: 4px; }
+  .modal-mask {
+    position: absolute; inset: 0; background: rgba(15,25,35,.45);
+    display: flex; align-items: flex-end; z-index: 10;
+  }
+  .modal { width: 100%; background: #fff; border-radius: 18px 18px 0 0; padding: 18px; }
+  .modal h3 { font-size: 15px; margin-bottom: 6px; }
+  .modal .opt { display: block; width: 100%; text-align: left; border: 1px solid #d5dee6; background: #fff; padding: 11px; border-radius: 10px; margin-top: 8px; font-size: 13px; cursor: pointer; }
+  .toast {
+    position: absolute; left: 50%; top: 44%; transform: translateX(-50%);
+    background: rgba(20,30,40,.85); color: #fff; padding: 10px 18px; border-radius: 10px;
+    font-size: 13px; z-index: 20; opacity: 0; transition: opacity .2s;
+  }
+  .toast.show { opacity: 1; }
+  .tip { font-size: 11px; color: #8a97a4; margin-top: 14px; max-width: 390px; text-align: center; line-height: 1.6; }
+  .reset { font-size: 11px; color: #2b7a78; background: none; border: none; cursor: pointer; text-decoration: underline; }
+</style>
+</head>
+<body>
+<h1>牙科诊所预约与到诊确认小程序</h1>
+<div class="subtitle">交互原型 · 可切换患者端 / 前台端演示两个用例</div>
+<div class="role-switch">
+  <button id="rolePatient" class="active" onclick="setRole('patient')">患者端 · 预约就诊</button>
+  <button id="roleStaff" onclick="setRole('staff')">前台端 · 到诊确认</button>
+</div>
+
+<div class="phone">
+  <div class="statusbar"><span>9:41</span><span>牙科诊所</span><span>▮▮▮</span></div>
+  <div class="topbar">
+    <span class="title" id="barTitle">预约就诊</span>
+    <span class="role-tag" id="barTag">患者端</span>
+  </div>
+  <div class="screen" id="screen"></div>
+  <div class="tabbar" id="tabbar"></div>
+  <div class="toast" id="toast"></div>
+  <div id="modalHost"></div>
+</div>
+
+<div class="tip">
+  这是一个前端可运行原型：数据保存在浏览器本地，两个角色共享同一份数据。<br>
+  演示建议：患者端提交一个预约 → 前台端打开「待确认名单」对过点未到的记录电话确认 → 看状态与爽约率变化。
+  <button class="reset" onclick="resetDB()">重置演示数据</button>
+</div>
+
+<script>
+const DOCTORS = [
+  {id:'d1', name:'张医生', dept:'补牙 / 根管'},
+  {id:'d2', name:'李医生', dept:'正畸 / 修复'},
+  {id:'d3', name:'王医生', dept:'洗牙 / 牙周'}
+];
+const TIMES = ['09:00','09:30','10:00','10:30','14:00','14:30','15:00','15:30'];
+const KEY = 'dental_proto_db_v1';
+
+function dateList(){
+  const out=[], base=new Date();
+  for(let i=0;i<3;i++){
+    const d=new Date(base); d.setDate(base.getDate()+i);
+    out.push(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'));
+  }
+  return out;
+}
+const DATES = dateList();
+
+function initDB(){
+  const db = {
+    appointments: [
+      {id:'a1', name:'陈女士', phone:'138****2210', doctorId:'d1', date:DATES[0], time:'09:00', status:'待确认', confirmResult:'', note:'左下后牙疼痛', registerTime:'昨日 15:20'},
+      {id:'a2', name:'刘先生', phone:'139****7781', doctorId:'d2', date:DATES[0], time:'09:30', status:'待确认', confirmResult:'', note:'复诊调整牙套', registerTime:'昨日 16:05'},
+      {id:'a3', name:'赵女士', phone:'137****0093', doctorId:'d3', date:DATES[0], time:'10:00', status:'待确认', confirmResult:'', note:'洗牙', registerTime:'今日 08:40'},
+      {id:'a4', name:'孙先生', phone:'136****4412', doctorId:'d1', date:DATES[1], time:'14:00', status:'已预约', confirmResult:'', note:'补牙', registerTime:'今日 09:02'}
+    ]
+  };
+  localStorage.setItem(KEY, JSON.stringify(db));
+  return db;
+}
+function loadDB(){ let s=localStorage.getItem(KEY); return s?JSON.parse(s):initDB(); }
+function saveDB(db){ localStorage.setItem(KEY, JSON.stringify(db)); }
+function resetDB(){ localStorage.removeItem(KEY); loadDB(); toast('演示数据已重置'); render(); }
+
+let role='patient', tab='home', book={doctorId:'',date:'',time:''}, confirmId=null;
+
+function setRole(r){
+  role=r;
+  document.getElementById('rolePatient').classList.toggle('active', r==='patient');
+  document.getElementById('roleStaff').classList.toggle('active', r==='staff');
+  tab = r==='patient' ? 'home' : 'pending';
+  render();
+}
+function setTab(t){ tab=t; render(); }
+function toast(msg){
+  const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'), 1600);
+}
+function badge(st){ return '<span class="badge st-'+st+'">'+st+'</span>'; }
+function doctorName(id){ const d=DOCTORS.find(x=>x.id===id); return d?d.name:''; }
+function isBooked(doctorId,date,time){
+  return loadDB().appointments.some(a=>a.doctorId===doctorId&&a.date===date&&a.time===time&&a.status!=='已取消');
+}
+
+function render(){
+  const screen=document.getElementById('screen');
+  const tabbar=document.getElementById('tabbar');
+  document.getElementById('barTitle').textContent = role==='patient'?'预约就诊':'到诊确认';
+  document.getElementById('barTag').textContent = role==='patient'?'患者端':'前台端';
+  if(role==='patient'){
+    tabbar.innerHTML =
+      '<div class="'+(tab==='home'?'active':'')+'" onclick="setTab(\'home\')"><div class="ti">⌂</div>首页</div>'+
+      '<div class="'+(tab==='book'?'active':'')+'" onclick="setTab(\'book\')"><div class="ti">＋</div>预约</div>'+
+      '<div class="'+(tab==='mine'?'active':'')+'" onclick="setTab(\'mine\')"><div class="ti">▤</div>我的预约</div>';
+    screen.innerHTML = tab==='home'?viewHome(): tab==='book'?viewBook():viewMine();
+  }else{
+    tabbar.innerHTML =
+      '<div class="'+(tab==='pending'?'active':'')+'" onclick="setTab(\'pending\')"><div class="ti">☎</div>待确认</div>'+
+      '<div class="'+(tab==='all'?'active':'')+'" onclick="setTab(\'all\')"><div class="ti">▤</div>全部预约</div>'+
+      '<div class="'+(tab==='stats'?'active':'')+'" onclick="setTab(\'stats\')"><div class="ti">◫</div>统计</div>';
+    screen.innerHTML = tab==='pending'?viewPending(): tab==='all'?viewAll():viewStats();
+  }
+}
+
+/* ===== 患者端 ===== */
+function viewHome(){
+  return '<div class="hero"><div class="big">您好，欢迎预约</div><div class="small">随时随地自助预约牙科就诊<br>无需打电话排队，到诊异常我们会为您保留名额</div></div>'+
+    '<div class="grid">'+
+      '<div class="tile" onclick="setTab(\'book\')"><div class="ico">📅</div><div class="lb">立即预约</div></div>'+
+      '<div class="tile" onclick="setTab(\'mine\')"><div class="ico">🎫</div><div class="lb">我的预约</div></div>'+
+    '</div>'+
+    '<div class="card" style="margin-top:12px"><h3>就诊提示</h3><div class="muted">请在预约时段准时到诊；若过点未到，前台将致电与您确认，回复「要来」或「改期」不会记为爽约。</div></div>';
+}
+function viewBook(){
+  const s1 = book.doctorId?1:0, s2 = book.date?1:0, s3 = book.time?1:0;
+  const step = s1+s2+s3;
+  const stepbar = '<div class="stepbar"><span class="'+(step>=1?'on':'')+'"></span><span class="'+(step>=2?'on':'')+'"></span><span class="'+(step>=3?'on':'')+'"></span></div>';
+  let h = stepbar+'<div class="card"><h3>1　选择医生</h3><div class="chips">'+
+    DOCTORS.map(d=>'<div class="chip '+(book.doctorId===d.id?'sel':'')+'" onclick="pickDoctor(\''+d.id+'\')">'+d.name+'<span style="opacity:.7;font-size:10px"> · '+d.dept+'</span></div>').join('')+'</div></div>';
+  if(book.doctorId){
+    h += '<div class="card"><h3>2　选择日期</h3><div class="chips">'+
+      DATES.map((dt,i)=>'<div class="chip '+(book.date===dt?'sel':'')+'" onclick="pickDate(\''+dt+'\')">'+(i===0?'今天':i===1?'明天':'后天')+' '+dt.slice(5)+'</div>').join('')+'</div></div>';
+  }
+  if(book.date){
+    h += '<div class="card"><h3>3　选择时段</h3><div class="chips">'+
+      TIMES.map(t=>{
+        const booked = isBooked(book.doctorId,book.date,t);
+        return '<div class="chip '+(book.time===t?'sel':'')+' '+(booked?'disabled':'')+'" '+(booked?'':'onclick="pickTime(\''+t+'\')"')+'>'+t+(booked?' 已约':'')+'</div>';
+      }).join('')+'</div><div class="muted" style="margin-top:8px">灰色时段表示已被预约，同一医生同一时段不可重复预约。</div></div>';
+  }
+  if(book.time){
+    h += '<div class="card"><h3>4　填写信息</h3>'+
+      '<div class="field"><label>姓名</label><input id="pname" class="txt" placeholder="请输入姓名"></div>'+
+      '<div class="field"><label>手机号</label><input id="pphone" class="txt" placeholder="请输入手机号"></div>'+
+      '<div class="field"><label>牙科就诊备注（选填）</label><input id="pnote" class="txt" placeholder="如主诉症状、既往治疗史、过敏史"></div>'+
+      '<button class="btn" style="width:100%" onclick="submitBook()">提交预约</button></div>';
+  }
+  return h;
+}
+function pickDoctor(id){ book.doctorId=id; book.time=''; render(); }
+function pickDate(dt){ book.date=dt; book.time=''; render(); }
+function pickTime(t){ book.time=t; render(); }
+function submitBook(){
+  const name=document.getElementById('pname').value.trim();
+  const phone=document.getElementById('pphone').value.trim();
+  const note=document.getElementById('pnote').value.trim();
+  if(!name||!phone){ toast('请填写姓名和手机号'); return; }
+  if(isBooked(book.doctorId,book.date,book.time)){ toast('该时段已被预约，请另选'); render(); return; }
+  const db=loadDB();
+  db.appointments.push({id:'a'+Date.now(),name,phone,doctorId:book.doctorId,date:book.date,time:book.time,status:'已预约',confirmResult:'',note,registerTime:'刚刚'});
+  saveDB(db);
+  book={doctorId:'',date:'',time:''};
+  toast('预约成功');
+  tab='mine'; render();
+}
+function viewMine(){
+  const list=loadDB().appointments.filter(a=>a.name.indexOf('我')>=0 || a.id.indexOf('a')===0 && a.phone==='138****2210');
+  // 演示：把最近一次新增的预约视为"我的"
+  const my = loadDB().appointments.slice().reverse().slice(0,1);
+  if(!my.length) return '<div class="empty">暂无预约</div>';
+  return '<div class="card"><h3>我的预约</h3>'+my.map(a=>
+    '<div class="list-item"><div class="row"><div class="left"><div class="name">'+doctorName(a.doctorId)+' · '+a.time+'</div>'+
+    '<div class="info">'+a.date+'　'+a.name+'　'+a.phone+'</div></div>'+badge(a.status)+'</div></div>').join('')+'</div>'+
+    '<div class="muted" style="text-align:center">演示模式下，这里显示最近一次提交的预约。</div>';
+}
+
+/* ===== 前台端 ===== */
+function viewPending(){
+  const list=loadDB().appointments.filter(a=>a.status==='待确认');
+  let h='<div class="card"><h3>待确认名单（过点未到）</h3>'+
+    '<div class="muted" style="margin-bottom:6px">系统自动筛出已过预约时刻且未到诊的记录，请逐一电话确认。</div></div>';
+  if(!list.length) return h+'<div class="empty">暂无待确认记录</div>';
+  h+='<div class="card">'+list.map(a=>
+    '<div class="list-item"><div class="row"><div class="left"><div class="name">'+a.name+'　'+badge(a.status)+'</div>'+
+    '<div class="info">'+doctorName(a.doctorId)+' · '+a.date+' '+a.time+'　'+a.phone+'</div>'+
+    '<div class="info">备注：'+(a.note||'无')+'</div></div></div>'+
+    '<button class="btn sm" style="margin-top:8px" onclick="openConfirm(\''+a.id+'\')">☎ 电话确认</button></div>').join('')+'</div>';
+  return h;
+}
+function openConfirm(id){ confirmId=id; renderModal(); }
+function renderModal(){
+  const a=loadDB().appointments.find(x=>x.id===confirmId);
+  if(!a) return;
+  document.getElementById('modalHost').innerHTML =
+    '<div class="modal-mask" onclick="if(event.target===this)closeModal()"><div class="modal">'+
+    '<h3>电话确认 · '+a.name+'</h3><div class="muted">'+doctorName(a.doctorId)+' · '+a.date+' '+a.time+'　'+a.phone+'</div>'+
+    '<div class="muted" style="margin:8px 0 4px">请选择患者答复（决定状态与是否计入爽约）：</div>'+
+    '<button class="opt" onclick="doConfirm(\'要来\',\'延迟到诊\')">要来 → 状态「延迟到诊」（挽回，不计爽约）</button>'+
+    '<button class="opt" onclick="doConfirm(\'改期\',\'已改期\')">改期 → 状态「已改期」（挽回，不计爽约）</button>'+
+    '<button class="opt" onclick="doConfirm(\'不来\',\'爽约\')">不来 → 状态「爽约」（计入爽约）</button>'+
+    '<button class="opt" onclick="doConfirm(\'联系不上\',\'爽约\')">联系不上 → 状态「爽约」（计入爽约）</button>'+
+    '<button class="btn ghost sm" style="margin-top:12px;width:100%" onclick="closeModal()">取消</button>'+
+    '</div></div>';
+}
+function closeModal(){ confirmId=null; document.getElementById('modalHost').innerHTML=''; }
+function doConfirm(result,status){
+  const db=loadDB(); const a=db.appointments.find(x=>x.id===confirmId);
+  if(a){ a.confirmResult=result; a.status=status; a.confirmTime='刚刚'; a.operator='前台小林'; }
+  saveDB(db); closeModal(); toast('已记录：'+result+'　状态更新为「'+status+'」'); render();
+}
+function viewAll(){
+  const list=loadDB().appointments;
+  return '<div class="card"><h3>全部预约（'+list.length+'）</h3>'+list.map(a=>
+    '<div class="list-item"><div class="row"><div class="left"><div class="name">'+a.name+'　'+badge(a.status)+'</div>'+
+    '<div class="info">'+doctorName(a.doctorId)+' · '+a.date+' '+a.time+'</div>'+
+    (a.confirmResult?'<div class="info">确认结果：'+a.confirmResult+'　操作人：'+a.operator+'</div>':'')+
+    '</div></div></div>').join('')+'</div>';
+}
+function viewStats(){
+  const list=loadDB().appointments;
+  const total=list.length;
+  const noShow=list.filter(a=>a.status==='爽约').length;
+  const saved=list.filter(a=>a.status==='延迟到诊'||a.status==='已改期').length;
+  const rate= total? Math.round(noShow/total*100):0;
+  return '<div class="card"><h3>运营看板</h3><div class="grid">'+
+    '<div><div class="stat-num">'+total+'</div><div class="stat-lb">预约总数</div></div>'+
+    '<div><div class="stat-num">'+noShow+'</div><div class="stat-lb">爽约数</div></div>'+
+    '<div><div class="stat-num" style="color:#2f7d43">'+saved+'</div><div class="stat-lb">已挽回</div></div>'+
+    '<div><div class="stat-num" style="color:'+(rate<=5?'#2f7d43':'#c0504d')+'">'+rate+'%</div><div class="stat-lb">爽约率（目标≤5%）</div></div>'+
+    '</div></div>'+
+    '<div class="card"><h3>口径说明</h3><div class="muted">仅「不来」「联系不上」计入爽约；「要来（延迟到诊）」「改期」属于被挽回，不计入爽约。与愿景度量口径一致。</div></div>';
+}
+
+loadDB(); render();
+</script>
+</body>
+</html>

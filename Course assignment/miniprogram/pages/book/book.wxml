@@ -1,0 +1,50 @@
+<view class="container">
+  <view class="stepbar">
+    <view class="seg {{step>=1?'on':''}}"></view>
+    <view class="seg {{step>=2?'on':''}}"></view>
+    <view class="seg {{step>=3?'on':''}}"></view>
+    <view class="seg {{step>=4?'on':''}}"></view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">1　选择医生</view>
+    <view class="chips">
+      <view wx:for="{{doctors}}" wx:key="id"
+            class="chip {{doctorId==item.id?'sel':''}}"
+            data-id="{{item.id}}" bindtap="pickDoctor">
+        {{item.name}} · {{item.dept}}
+      </view>
+    </view>
+  </view>
+
+  <view class="card" wx:if="{{doctorId}}">
+    <view class="card-title">2　选择日期</view>
+    <view class="chips">
+      <view wx:for="{{dates}}" wx:for-index="i" wx:key="*this"
+            class="chip {{date==item?'sel':''}}"
+            data-d="{{item}}" bindtap="pickDate">
+        {{dateLabels[i]}}
+      </view>
+    </view>
+  </view>
+
+  <view class="card" wx:if="{{date}}">
+    <view class="card-title">3　选择时段</view>
+    <view class="chips">
+      <view wx:for="{{slotList}}" wx:key="t"
+            class="chip {{time==item.t?'sel':''}} {{item.disabled?'disabled':''}}"
+            data-t="{{item.t}}" data-disabled="{{item.disabled}}" bindtap="pickTime">
+        {{item.t}}{{item.disabled?' 已约':''}}
+      </view>
+    </view>
+    <view class="muted" style="margin-top:16rpx">灰色时段已被预约，同一医生同一时段不可重复预约。</view>
+  </view>
+
+  <view class="card" wx:if="{{time}}">
+    <view class="card-title">4　填写信息</view>
+    <view class="field"><text class="lb">姓名</text><input class="input" placeholder="请输入姓名" bindinput="onName" value="{{name}}"/></view>
+    <view class="field"><text class="lb">手机号</text><input class="input" placeholder="请输入手机号" bindinput="onPhone" value="{{phone}}"/></view>
+    <view class="field"><text class="lb">牙科就诊备注（选填）</text><input class="input" placeholder="如主诉症状、既往治疗史、过敏史" bindinput="onNote" value="{{note}}"/></view>
+    <view class="btn" bindtap="submit">提交预约</view>
+  </view>
+</view>

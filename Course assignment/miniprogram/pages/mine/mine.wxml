@@ -1,0 +1,18 @@
+<view class="container">
+  <view class="card">
+    <view class="card-title">我的预约</view>
+    <view wx:if="{{list.length==0}}" class="empty">暂无预约</view>
+    <view wx:for="{{list}}" wx:key="id" class="list-item">
+      <view class="row">
+        <view class="left">
+          <view class="name">{{item.doctor}} · {{item.time}}</view>
+          <view class="info">{{item.date}}　{{item.name}}　{{item.phone}}</view>
+          <view class="info">当前状态：{{item.statusText}}</view>
+        </view>
+        <view class="badge {{item.status}}">{{item.statusText}}</view>
+      </view>
+    </view>
+  </view>
+  <view class="btn ghost" bindtap="goBook">再约一个时段</view>
+  <view class="muted" style="text-align:center;margin-top:16rpx">演示模式下显示最近一次提交的预约。</view>
+</view>

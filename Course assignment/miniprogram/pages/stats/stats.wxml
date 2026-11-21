@@ -1,0 +1,18 @@
+<view class="container">
+  <view class="card">
+    <view class="card-title">运营看板</view>
+    <view class="stat-grid">
+      <view class="stat-item"><view class="stat-num">{{stats.total || 0}}</view><view class="stat-lb">预约总数</view></view>
+      <view class="stat-item"><view class="stat-num warn">{{stats.noShow || 0}}</view><view class="stat-lb">爽约数</view></view>
+      <view class="stat-item"><view class="stat-num ok">{{stats.saved || 0}}</view><view class="stat-lb">已挽回</view></view>
+      <view class="stat-item">
+        <view class="stat-num {{stats.rate<=5?'ok':'warn'}}">{{stats.rate || 0}}%</view>
+        <view class="stat-lb">爽约率（目标 {{target}}）</view>
+      </view>
+    </view>
+  </view>
+  <view class="card">
+    <view class="card-title">口径说明</view>
+    <view class="muted">仅「不来」「联系不上」计入爽约；「要来（延迟到诊）」「改期」属于被挽回，不计入爽约。与愿景度量口径一致。</view>
+  </view>
+</view>

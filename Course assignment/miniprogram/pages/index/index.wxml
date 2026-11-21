@@ -1,0 +1,27 @@
+<view class="container">
+  <view class="hero">
+    <view class="big">牙科诊所预约与到诊确认</view>
+    <view class="small">选择角色进入演示：患者可自助预约，前台可查看待确认名单并电话确认</view>
+  </view>
+
+  <view class="card-title" style="margin:8rpx 8rpx 20rpx">选择角色</view>
+  <view class="tile-grid">
+    <view class="tile" bindtap="goPatient">
+      <view class="ico">📅</view>
+      <view class="lb">患者端</view>
+      <view class="muted" style="margin-top:8rpx">预约就诊</view>
+    </view>
+    <view class="tile" bindtap="goStaff">
+      <view class="ico">☎️</view>
+      <view class="lb">前台端</view>
+      <view class="muted" style="margin-top:8rpx">到诊确认</view>
+    </view>
+  </view>
+
+  <view class="card-title" style="margin:24rpx 8rpx 20rpx">其他功能</view>
+  <view class="card">
+    <view class="list-item" bindtap="goMine"><view class="row"><view class="left"><view class="name">我的预约</view><view class="info">查看最近一次预约及状态</view></view><view class="muted">›</view></view></view>
+    <view class="list-item" bindtap="goStats"><view class="row"><view class="left"><view class="name">运营统计</view><view class="info">爽约率、挽回数看板</view></view><view class="muted">›</view></view></view>
+    <view class="list-item" bindtap="reset"><view class="row"><view class="left"><view class="name">重置演示数据</view><view class="info">恢复初始预约记录</view></view><view class="muted">›</view></view></view>
+  </view>
+</view>

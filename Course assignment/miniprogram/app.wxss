@@ -1,0 +1,69 @@
+page {
+  background: #f6f8fa;
+  font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif;
+  color: #1f2d3d;
+}
+.container { padding: 24rpx; }
+.card {
+  background: #fff; border-radius: 24rpx; padding: 28rpx;
+  margin-bottom: 24rpx; box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.04);
+}
+.card-title { font-size: 30rpx; font-weight: 600; color: #2b3a49; margin-bottom: 20rpx; }
+.muted { color: #8896a3; font-size: 24rpx; line-height: 1.6; }
+.name { font-size: 28rpx; font-weight: 600; }
+.info { font-size: 24rpx; color: #8896a3; margin-top: 8rpx; }
+.hero {
+  background: linear-gradient(135deg, #2b7a78, #3a9d9a);
+  color: #fff; border-radius: 28rpx; padding: 36rpx; margin-bottom: 24rpx;
+}
+.hero .big { font-size: 34rpx; font-weight: 600; margin-bottom: 12rpx; }
+.hero .small { font-size: 24rpx; opacity: 0.9; line-height: 1.7; }
+.btn {
+  background: #2b7a78; color: #fff; border-radius: 18rpx;
+  font-size: 28rpx; padding: 20rpx 0; text-align: center; margin-top: 16rpx;
+}
+.btn.ghost { background: #eef4f4; color: #2b7a78; }
+.btn.danger { background: #c0504d; }
+.btn.sm { padding: 12rpx 28rpx; font-size: 24rpx; display: inline-block; margin-top: 16rpx; }
+.btn.disabled { background: #c8d2da; color: #fff; }
+.chips { display: flex; flex-wrap: wrap; gap: 16rpx; }
+.chip {
+  border: 2rpx solid #d5dee6; background: #fff; color: #41515f;
+  padding: 14rpx 24rpx; border-radius: 16rpx; font-size: 26rpx;
+}
+.chip.sel { background: #2b7a78; border-color: #2b7a78; color: #fff; }
+.chip.disabled { background: #eef1f4; color: #b6c0c9; text-decoration: line-through; }
+.field { margin-bottom: 24rpx; }
+.field .lb { display: block; font-size: 26rpx; color: #6b7b8a; margin-bottom: 12rpx; }
+.field .input {
+  width: 100%; border: 2rpx solid #d5dee6; border-radius: 16rpx;
+  padding: 18rpx 20rpx; font-size: 28rpx; box-sizing: border-box; background: #fff;
+}
+.stepbar { display: flex; gap: 12rpx; margin-bottom: 24rpx; }
+.stepbar .seg { flex: 1; height: 8rpx; background: #dfe6ec; border-radius: 4rpx; }
+.stepbar .seg.on { background: #2b7a78; }
+.row { display: flex; justify-content: space-between; align-items: center; }
+.left { flex: 1; min-width: 0; }
+.badge { font-size: 22rpx; padding: 6rpx 18rpx; border-radius: 20rpx; white-space: nowrap; }
+.badge.BOOKED { background: #e7f1fb; color: #2b6cb0; }
+.badge.PENDING_CONFIRM { background: #fdf0dc; color: #a86b12; }
+.badge.DELAYED { background: #e6f4ea; color: #2f7d43; }
+.badge.RESCHEDULED { background: #ede9f7; color: #6b46a8; }
+.badge.NO_SHOW { background: #fbe9e9; color: #b34545; }
+.badge.FINISHED, .badge.CANCELLED { background: #eceff1; color: #5f6b75; }
+.list-item { border-bottom: 2rpx solid #eef1f4; padding: 22rpx 0; }
+.list-item:last-child { border-bottom: none; }
+.empty { text-align: center; color: #9aa7b2; font-size: 26rpx; padding: 60rpx 20rpx; }
+.tile-grid { display: flex; gap: 24rpx; }
+.tile {
+  flex: 1; background: #fff; border-radius: 24rpx; padding: 36rpx 20rpx;
+  text-align: center; box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.04);
+}
+.tile .ico { font-size: 52rpx; }
+.tile .lb { font-size: 26rpx; margin-top: 12rpx; color: #3a4a59; }
+.stat-grid { display: flex; flex-wrap: wrap; }
+.stat-item { width: 50%; text-align: center; padding: 20rpx 0; }
+.stat-num { font-size: 52rpx; font-weight: 700; color: #2b7a78; }
+.stat-num.warn { color: #c0504d; }
+.stat-num.ok { color: #2f7d43; }
+.stat-lb { font-size: 24rpx; color: #8896a3; margin-top: 8rpx; }

@@ -1,0 +1,21 @@
+<view class="container">
+  <view class="card">
+    <view class="card-title">待确认名单（过点未到）</view>
+    <view class="muted">系统自动筛出已过预约时刻且未到诊的记录，请逐一电话确认。</view>
+  </view>
+
+  <view wx:if="{{list.length==0}}" class="empty">暂无待确认记录</view>
+  <view class="card" wx:for="{{list}}" wx:key="id">
+    <view class="row">
+      <view class="left">
+        <view class="name">{{item.name}}　<text class="badge {{item.status}}">{{item.statusText}}</text></view>
+        <view class="info">{{item.doctor}} · {{item.date}} {{item.time}}　{{item.phone}}</view>
+        <view class="info">备注：{{item.note || '无'}}</view>
+      </view>
+    </view>
+    <view class="btn sm" data-id="{{item.id}}" bindtap="goConfirm">☎ 电话确认</view>
+  </view>
+
+  <view class="btn ghost" bindtap="goAll">查看全部预约</view>
+  <view class="btn ghost" bindtap="goStats">运营统计</view>
+</view>

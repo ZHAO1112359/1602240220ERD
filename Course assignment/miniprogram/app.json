@@ -1,0 +1,21 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/book/book",
+    "pages/mine/mine",
+    "pages/pending/pending",
+    "pages/confirm/confirm",
+    "pages/all/all",
+    "pages/stats/stats"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#2b7a78",
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "牙科诊所预约与到诊确认",
+    "backgroundColor": "#f6f8fa",
+    "backgroundTextStyle": "dark",
+    "enablePullDownRefresh": false
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}
